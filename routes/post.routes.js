@@ -17,8 +17,7 @@ router.get("/", async (req, res, next) => {
 
 // POST "/api/destinations" => Create a new post
 router.post("/create-form", async (req, res, next) => {
-
-    const { title, country, description, image, category } = req.body;
+  const { title, country, description, image, category } = req.body;
 
   try {
     const response = await Post.create({
@@ -26,10 +25,50 @@ router.post("/create-form", async (req, res, next) => {
       country,
       description,
       image,
-      category
+      category,
     });
 
-    res.status(200).json()
+    res.status(200).json();
+  } catch (error) {
+    next(error);
+  }
+});
+
+//GET "/api/destinations/:postId" => send post details by ID
+router.get("/:postId", async (req, res, next) => {
+  const { postId } = req.params;
+  try {
+    const response = await Post.findById(postId);
+    res.json(response);
+  } catch (error) {
+    next(error);
+  }
+});
+
+//DELETE "/api/destinations/:postId" => delete post by ID
+router.delete("/:postId", async (req, res, next) => {
+  const { postId } = req.params;
+  try {
+    await Post.findByIdAndDelete(postId);
+    res.json("The post has been deleted.");
+  } catch (error) {
+    next(error);
+  }
+});
+
+//PATCH "/api/destinations/:postId" => update a post by ID
+router.patch("/:postId", async (req, res, next) => {
+  const { postId } = req.params;
+  const { title, country, description, image, category } = req.body;
+  try {
+    await Post.findByIdAndUpdate(postId, {
+      title,
+      country,
+      description,
+      image,
+      category,
+    });
+    res.json("The post has been updated.");
   } catch (error) {
     next(error);
   }
