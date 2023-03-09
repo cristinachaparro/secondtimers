@@ -16,16 +16,18 @@ router.get("/", async (req, res, next) => {
 });
 
 // POST "/api/destinations" => Create a new post
-router.post("/create-form", async (req, res, next) => {
+router.post("/create-form", isAuthenticated, async (req, res, next) => {
   const { title, country, description, image, category } = req.body;
 
   try {
     const response = await Post.create({
-      title,
-      country,
-      description,
-      image,
-      category,
+      title: title,
+      country: country,
+      description: description,
+      image: image,
+      category: category,
+      creator: req.payload._id
+
     });
 
     res.status(200).json();
@@ -46,7 +48,7 @@ router.get("/:postId", async (req, res, next) => {
 });
 
 //DELETE "/api/destinations/:postId" => delete post by ID
-router.delete("/:postId", async (req, res, next) => {
+router.delete("/:postId", isAuthenticated, async (req, res, next) => {
   const { postId } = req.params;
   try {
     await Post.findByIdAndDelete(postId);
@@ -57,7 +59,7 @@ router.delete("/:postId", async (req, res, next) => {
 });
 
 //PATCH "/api/destinations/:postId" => update a post by ID
-router.patch("/:postId", async (req, res, next) => {
+router.patch("/:postId", isAuthenticated, async (req, res, next) => {
   const { postId } = req.params;
   const { title, country, description, image, category } = req.body;
   try {
@@ -73,5 +75,54 @@ router.patch("/:postId", async (req, res, next) => {
     next(error);
   }
 });
+
+// ..............COMMENTS............... //
+
+//POST "/api/destinations/:postId/comment" => add a new comment
+router.post("/:postId/comment", isAuthenticated, async (req, res, next) => {
+    const { postId } = req.params;
+    const { comment } = req.body;
+
+    try {
+
+        const singleComment = await Comment.create({
+          comment: comment,
+          creator: req.payload._id,
+          post: postId,
+
+        });
+    
+      } catch (error) {
+        next(error);
+      }
+})
+
+//DELETE "/api/destinations/:commentId" => delete comment by ID
+router.delete("/:commentId", isAuthenticated, async (req, res, next) => {
+    const { commentId } = req.params;
+    try {
+      await Post.findByIdAndDelete(commentId);
+      res.json("The comment has been deleted.");
+    } catch (error) {
+      next(error);
+    }
+  });
+  
+  //PATCH "/api/destinations/:commentId" => update a comment by ID
+  router.patch("/:commentId", isAuthenticated, async (req, res, next) => {
+    const { commentId } = req.params;
+    const { comment } = req.body;
+    try {
+      await Comment.findByIdAndUpdate(commentId, {
+        comment: comment,
+        creator: req.payload._id,
+        post: postId,
+
+      });
+      res.json("The comment has been updated.");
+    } catch (error) {
+      next(error);
+    }
+  });
 
 module.exports = router;

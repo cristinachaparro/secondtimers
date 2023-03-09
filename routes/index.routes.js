@@ -10,4 +10,7 @@ router.use("/auth", authRoutes);
 const postRoutes = require("./post.routes");
 router.use("/destinations", postRoutes);
 
+const profileRoutes = require("./profile.routes")
+router.use("/profile", profileRoutes)
+
 module.exports = router;
