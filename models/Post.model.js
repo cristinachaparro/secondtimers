@@ -1,4 +1,6 @@
 const { Schema, model } = require("mongoose");
+const countries = require("../utils/countries");
+const categories = require("../utils/categories");
 
 const postSchema = new Schema({
   title: {
@@ -7,59 +9,8 @@ const postSchema = new Schema({
   },
   country: {
     type: String,
-    required: true,
-    enum: [
-      "Albania",
-      "Andorra",
-      "Armenia",
-      "Austria",
-      "Azerbaijan",
-      "Belarus",
-      "Belgium",
-      "Bosnia and Herzegovina",
-      "Bulgaria",
-      "Croatia",
-      "Cyprus",
-      "Czech Republic",
-      "Denmark",
-      "Estonia",
-      "Finland",
-      "France",
-      "Georgia",
-      "Germany",
-      "Greece",
-      "Hungary",
-      "Iceland",
-      "Ireland",
-      "Italy",
-      "Kosovo",
-      "Latvia",
-      "Liechtenstein",
-      "Lithuania",
-      "Luxembourg",
-      "Macedonia",
-      "Malta",
-      "Moldova",
-      "Monaco",
-      "Montenegro",
-      "The Netherlands",
-      "Norway",
-      "Poland",
-      "Portugal",
-      "Romania",
-      "Russia",
-      "San Marino",
-      "Serbia",
-      "Slovakia",
-      "Slovenia",
-      "Spain",
-      "Sweden",
-      "Switzerland",
-      "Turkey",
-      "Ukraine",
-      "United Kingdom",
-      "Vatican City",
-    ],
+    // required: true,
+    enum: countries,
   },
   description: {
     type: String,
@@ -76,13 +27,7 @@ const postSchema = new Schema({
   },
   category: {
     type: String,
-    enum: [
-      "monuments",
-      "nature",
-      "entertainment",
-      "food&drinks",
-      "special corners",
-    ],
+    enum: categories,
   },
 });
 
