@@ -99,14 +99,15 @@ router.patch("/:postId", isAuthenticated, async (req, res, next) => {
 // ..............COMMENTS............... //
 
 // //GET "/api/destinations/:postId/comment" => find all comments
-// router.get("/comments", async (req, res, next) => {
-//   try {
-//     const allComments = await Comment.find().populate("post");
-//     res.json(allComments);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+router.get("/:postId/comment", async (req, res, next) => {
+  try {
+    const { postId } = req.params;
+    const comments = await Comment.find({ post: postId }).populate("creator");
+    res.json(comments);
+  } catch (error) {
+    next(error);
+  }
+});
 
 //POST "/api/destinations/:postId/comment" => add a new comment
 router.post("/:postId/comment", isAuthenticated, async (req, res, next) => {
