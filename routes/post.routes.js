@@ -98,6 +98,16 @@ router.patch("/:postId", isAuthenticated, async (req, res, next) => {
 
 // ..............COMMENTS............... //
 
+// //GET "/api/destinations/:postId/comment" => find all comments
+// router.get("/comments", async (req, res, next) => {
+//   try {
+//     const allComments = await Comment.find().populate("post");
+//     res.json(allComments);
+//   } catch (error) {
+//     next(error);
+//   }
+// });
+
 //POST "/api/destinations/:postId/comment" => add a new comment
 router.post("/:postId/comment", isAuthenticated, async (req, res, next) => {
   const { postId } = req.params;
@@ -109,6 +119,7 @@ router.post("/:postId/comment", isAuthenticated, async (req, res, next) => {
       creator: req.payload._id,
       post: postId,
     });
+    res.json("Comment correctly created.");
   } catch (error) {
     next(error);
   }
