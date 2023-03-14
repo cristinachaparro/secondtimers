@@ -130,7 +130,7 @@ router.post("/:postId/comment", isAuthenticated, async (req, res, next) => {
 router.delete("/:commentId", isAuthenticated, async (req, res, next) => {
   const { commentId } = req.params;
   try {
-    await Post.findByIdAndDelete(commentId);
+    await Comment.findByIdAndDelete(commentId);
     res.json("The comment has been deleted.");
   } catch (error) {
     next(error);
