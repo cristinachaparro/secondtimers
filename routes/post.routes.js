@@ -126,8 +126,8 @@ router.post("/:postId/comment", isAuthenticated, async (req, res, next) => {
   }
 });
 
-//DELETE "/api/destinations/:commentId" => delete comment by ID
-router.delete("/:commentId", isAuthenticated, async (req, res, next) => {
+//DELETE "/api/destinations/:commentId/delete" => delete comment by ID
+router.delete("/comment/:commentId", isAuthenticated, async (req, res, next) => {
   const { commentId } = req.params;
   try {
     await Comment.findByIdAndDelete(commentId);
@@ -138,7 +138,7 @@ router.delete("/:commentId", isAuthenticated, async (req, res, next) => {
 });
 
 //PATCH "/api/destinations/:commentId" => update a comment by ID
-router.patch("/:commentId", isAuthenticated, async (req, res, next) => {
+router.patch("/comment/:commentId", isAuthenticated, async (req, res, next) => {
   const { commentId } = req.params;
   const { comment } = req.body;
   try {
@@ -150,6 +150,22 @@ router.patch("/:commentId", isAuthenticated, async (req, res, next) => {
     res.json("The comment has been updated.");
   } catch (error) {
     next(error);
+  }
+});
+
+// POST "api/destinations/:postId/favourite" => Add a post to favourites
+router.post("/:postId/favourite", isAuthenticated, async (req, res, next) => {
+  const { postId } = req.params;
+  const userId = req.payload._id;
+
+  console.log(postId, userId)
+  try {
+    await User.findByIdAndUpdate(userId, {
+       $addToSet: { favouritePosts: postId }, 
+    });
+    res.json("The post has been added to favourite.");
+  } catch (err) {
+    next(err);
   }
 });
 

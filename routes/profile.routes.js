@@ -41,8 +41,39 @@ router.patch("/edit-form", isAuthenticated, async (req, res, next) => {
   }
 });
 
-// POST "/profile/favourite/:postId"
+// GET "/profile/favourites" => shows the favourite list
+router.get("/favourites", isAuthenticated, async (req, res, next) => {
 
-// DELETE "/profile/favourite/:postId/del"
+  const userId = req.payload._id;
+
+  try {
+    const userResponse = await User.findById(userId).populate("favouritePosts")
+    console.log(userResponse)
+
+    res.json(userResponse);
+  } catch (err) {
+    next(err);
+  }
+});
+
+
+// DELETE "/profile/favourite/:postId/delete"
+router.post("/favourite/:postId/delete", isAuthenticated, async (req, res, next) => {
+  const { postId } = req.params;
+  const userId = req.payload._id;
+
+  console.log(postId, userId)
+  try {
+    await User.findByIdAndUpdate(userId, {
+       $pull: { favouritePosts: postId }, 
+    });
+    res.json("The post has been removed to favourite.");
+  } catch (err) {
+    next(err);
+  }
+});
+
+
+
 
 module.exports = router;
