@@ -13,6 +13,17 @@ router.get("/", isAuthenticated, async (req, res, next) => {
   }
 });
 
+// // GET "/profile/user/:id" => Show a profile
+router.get("/user/:id", isAuthenticated, async (req, res, next) => {
+  try {
+    const response = await User.findById(req.params.id);
+
+    res.json(response);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // GET "/profile/edit-form" => Edit your profile
 router.get("/edit-form", isAuthenticated, async (req, res, next) => {
   try {
