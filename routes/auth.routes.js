@@ -83,7 +83,6 @@ router.post("/login", async (req, res, next) => {
       res.status(400).json({ errorMessage: "Password not valid." });
       return;
     }
-    console.log("hemos llegado hasta aca, el password es correcto");
 
     //token that identifies the user
     const payload = {

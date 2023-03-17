@@ -163,7 +163,6 @@ router.post("/:postId/favourite", isAuthenticated, async (req, res, next) => {
   const { postId } = req.params;
   const userId = req.payload._id;
 
-  console.log(postId, userId);
   try {
     await User.findByIdAndUpdate(userId, {
       $addToSet: { favouritePosts: postId },

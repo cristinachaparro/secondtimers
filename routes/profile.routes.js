@@ -47,7 +47,6 @@ router.get("/favourites", isAuthenticated, async (req, res, next) => {
 
   try {
     const userResponse = await User.findById(userId).populate("favouritePosts");
-    console.log(userResponse);
 
     res.json(userResponse);
   } catch (err) {
@@ -63,7 +62,6 @@ router.post(
     const { postId } = req.params;
     const userId = req.payload._id;
 
-    console.log(postId, userId);
     try {
       await User.findByIdAndUpdate(userId, {
         $pull: { favouritePosts: postId },
@@ -74,5 +72,16 @@ router.post(
     }
   }
 );
+
+// GET "/api/profile/:userId" => See the author profile
+router.get("/:userId", async (req, res, next) => {
+  const { userId } = req.params;
+  try {
+    const response = await User.findById(userId);
+    res.json(response);
+  } catch (error) {
+    next(err);
+  }
+});
 
 module.exports = router;
